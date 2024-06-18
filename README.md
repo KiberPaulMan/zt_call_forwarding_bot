@@ -1,12 +1,13 @@
-#### Сборка образа с репозитория:
+#### Сборка образа из репозитория:
 1. docker build -t telegram_bot_image .
    
 #### Запуск контейнера из собранного образа:
 2. docker run -d --name telegram_bot_docker --network host  --privileged telegram_bot_image
    
-#### Исполнение комманд внутри docker-контейнера:
+#### Запуск командной оболочки bash внутри docker-контейнера:
 3. docker exec -it telegram_bot_docker bash
-	
+
+## Внутри контейнера:
 #### Создание файла .env и копирование в него чувствительных данных в следующем формате:
 ```python
 # TELEGRAM_BOT_TOKEN
@@ -34,6 +35,7 @@ PUTINCEV_TG_ID=*********
 FILE_PATH=/mnt/win_share/duty.xlsx
 ```
 
+## Внутри контейнера:
 #### Монтирование сетевой папки с дежурствами в /mnt/win_share, где username и password - учетные данные с правами доступа:
 4. mount -t cifs -o username=***,password=***,rw,iocharset=utf8 '//dca.zt.ru/Отдел ИТ$/! Инфо !/' /mnt/win_share
  
