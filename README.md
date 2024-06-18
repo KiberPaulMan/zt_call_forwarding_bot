@@ -1,5 +1,3 @@
-﻿# zt_call_forwarding_bot
- 
 #### Сборка образа с репозитория:
 1. docker build -t telegram_bot_image .
    
