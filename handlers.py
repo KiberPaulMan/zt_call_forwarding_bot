@@ -1,3 +1,5 @@
+import os
+from dotenv import find_dotenv, load_dotenv
 from aiogram import types, Router, F
 from aiogram.filters import Command
 
@@ -5,7 +7,8 @@ from keyboards import reply
 import mts_api as api
 from databook import phonebook, white_users_id
 from parse.duty_file_analysis import get_excel_data, parse_excel_data, get_duty
-from my_smb.shared_file import get_file_path_from_remote_server
+
+load_dotenv(find_dotenv())
 
 handlers_router = Router()
 
@@ -56,7 +59,7 @@ async def process_callback_show_timetable(callback: types.CallbackQuery):
     user_id = callback.from_user.id
     username = [key for key, value in white_users_id.items() if value == user_id][0]
 
-    path = get_file_path_from_remote_server()
+    path = os.getenv('FILE_PATH')
 
     if not path:
         await callback.message.answer('Файл с дежурствами не найден!')
