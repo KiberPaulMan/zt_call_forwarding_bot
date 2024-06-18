@@ -41,7 +41,6 @@ PUTINCEV_TG_ID=*********
 FILE_PATH=/mnt/win_share/duty.xlsx
 ```
 
-### Внутри контейнера:
 #### Монтирование сетевой папки с дежурствами в /mnt/win_share, где username и password - учетные данные с правами доступа:
 ```python
    mount -t cifs -o username=***,password=***,rw,iocharset=utf8 '//dca.zt.ru/Отдел ИТ$/! Инфо !/' /mnt/win_share
