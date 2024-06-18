@@ -1,5 +1,7 @@
 #### Сборка образа из репозитория:
-1. docker build -t telegram_bot_image .
+1. ```python
+   docker build -t telegram_bot_image .
+   ```   
    
 #### Запуск контейнера из собранного образа:
 2. docker run -d --name telegram_bot_docker --network host  --privileged telegram_bot_image
