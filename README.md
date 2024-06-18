@@ -8,8 +8,9 @@
 3. docker exec -it telegram_bot_docker bash
 	
 #### Создание файла .env и копирование в него чувствительных данных в следующем формате:
-4. ```python
-   # TELEGRAM_BOT_TOKEN
+4.
+```python
+# TELEGRAM_BOT_TOKEN
 BOT_TOKEN=**********
 
 # MTS_API_AUTH
@@ -33,6 +34,7 @@ PUTINCEV_TG_ID=*********
 #REMOTE FILE PATH
 FILE_PATH=/mnt/win_share/duty.xlsx
 ```
+
 #### Монтирование сетевой папки с дежурствами в /mnt/win_share, где username и password - учетные данные с правами доступа:
 6. mount -t cifs -o username=***,password=***,rw,iocharset=utf8 '//dca.zt.ru/Отдел ИТ$/! Инфо !/' /mnt/win_share
  
