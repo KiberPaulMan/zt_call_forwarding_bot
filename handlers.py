@@ -48,7 +48,9 @@ async def process_callback_button3(callback: types.CallbackQuery):
 async def process_callback_redirection(callback: types.CallbackQuery):
     response = api.create_call_forwarding(phonebook[callback.data][0])
     if response['status_code'] == 202:
-        await callback.message.answer(f'Переадресация на номер {phonebook[callback.data]} выполнена успешна!')
+        phone = phonebook[callback.data]
+        format_phone = f'+{phone[0]} ({phone[1:4]})-{phone[4:7]}-{phone[7:9]}-{phone[9:]}'
+        await callback.message.answer(f'Переадресация на номер {format_phone} выполнена успешна!')
     else:
         await callback.message.answer('Ошибка на сервере! \nПереадресация не выполнена!')
 
