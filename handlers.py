@@ -7,6 +7,7 @@ from keyboards import reply
 import mts_api as api
 from databook import phonebook, white_users_id
 from parse.duty_file_analysis import get_excel_data, parse_excel_data, get_duty
+from parse.phone_format import get_phone_format
 
 load_dotenv(find_dotenv())
 
@@ -29,7 +30,7 @@ async def process_callback_button1(callback_query: types.CallbackQuery):
     if response:
         phone = response[0]['productCharacteristic'][0]['value']
         await callback_query.message.answer(
-            text=f'Переадресация выполнена на номер: {phone} ({dict(phonebook.values())[phone]})')
+            text=f'Переадресация выполнена на номер: {get_phone_format(phone)} ({dict(phonebook.values())[phone]})')
     else:
         await callback_query.message.answer(text=f'На данный номер переадресация не установлена')
 
@@ -48,9 +49,8 @@ async def process_callback_button3(callback: types.CallbackQuery):
 async def process_callback_redirection(callback: types.CallbackQuery):
     response = api.create_call_forwarding(phonebook[callback.data][0])
     if response['status_code'] == 202:
-        phone = phonebook[callback.data][0]
-        format_phone = f'+{phone[0]} ({phone[1:4]})-{phone[4:7]}-{phone[7:9]}-{phone[9:]}'
-        await callback.message.answer(f'Переадресация на номер {format_phone} выполнена успешна!')
+        phone = get_phone_format(phonebook[callback.data][0])
+        await callback.message.answer(f'Переадресация на номер {phone} выполнена успешна!')
     else:
         await callback.message.answer('Ошибка на сервере! \nПереадресация не выполнена!')
 
