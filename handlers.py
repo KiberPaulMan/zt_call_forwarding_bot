@@ -18,89 +18,88 @@ handlers_router = Router()
 async def process_command_start(message: types.Message):
     if message.from_user.id not in white_users_id.values():
         await message.reply('У вас нет прав доступа к этому боту!')
-    await message.reply('Добро пожаловать в телеграм бот!', reply_markup=reply.inline_kb1)
+    else:
+        await message.reply('Добро пожаловать в телеграм бот!', reply_markup=reply.inline_kb1)
 
 
 @handlers_router.message(F.text)
 async def wrong_messages(message: types.Message):
     if message.from_user.id not in white_users_id.values():
         await message.reply('У вас нет прав доступа к этому боту!')
-    await message.answer('Хватит писать тут всякую хрень!')
+    else:
+        await message.answer('Хватит писать тут всякую хрень!')
 
 
 @handlers_router.callback_query(F.data == 'check_status')
 async def process_callback_button1(callback_query: types.CallbackQuery):
     if callback_query.message.from_user.id not in white_users_id.values():
-        await message.reply('У вас нет прав доступа к этому боту!')
-        
-    response = api.get_status_call_forwarding()
-    if response:
-        phone = response[0]['productCharacteristic'][0]['value']
-        await callback_query.message.answer(
-            text=f'Переадресация выполнена на номер: {get_phone_format(phone)} ({dict(phonebook.values())[phone]})')
+        await callback_query.message.answer(text=f'У вас нет прав доступа к этому боту!')
+    
     else:
-        await callback_query.message.answer(text=f'На данный номер переадресация не установлена')
+        response = api.get_status_call_forwarding()
+        if response:
+            phone = response[0]['productCharacteristic'][0]['value']
+            await callback_query.message.answer(
+                text=f'Переадресация выполнена на номер: {get_phone_format(phone)} ({dict(phonebook.values())[phone]})')
+        else:
+            await callback_query.message.answer(text=f'На данный номер переадресация не установлена')
 
 
 @handlers_router.callback_query(F.data == 'create_call_forwarding')
 async def process_callback_button2(callback: types.CallbackQuery):
     if callback.message.from_user.id not in white_users_id.values():
-        await message.reply('У вас нет прав доступа к этому боту!')
-    await callback.message.answer('Сделай выбор, чувак!', reply_markup=reply.person_kb1)
+        await callback.message.answer(text=f'У вас нет прав доступа к этому боту!')
+    else:
+        await callback.message.answer('Сделай выбор, чувак!', reply_markup=reply.person_kb1)
 
 
 @handlers_router.callback_query(F.data == 'show_timetable')
 async def process_callback_button3(callback: types.CallbackQuery):
     if callback.message.from_user.id not in white_users_id.values():
-        await message.reply('У вас нет прав доступа к этому боту!')
-    await callback.message.answer('Выберите тип расписания:', reply_markup=reply.timetable_kb1)
+        await callback.message.answer(text=f'У вас нет прав доступа к этому боту!')
+    else:
+        await callback.message.answer('Выберите тип расписания:', reply_markup=reply.timetable_kb1)
 
 
 @handlers_router.callback_query(F.data.in_(phonebook.keys()))
 async def process_callback_redirection(callback: types.CallbackQuery):
     if callback.message.from_user.id not in white_users_id.values():
-        await message.reply('У вас нет прав доступа к этому боту!')
+        await callback.message.answer(text=f'У вас нет прав доступа к этому боту!')
     
-    response = api.create_call_forwarding(phonebook[callback.data][0])
-    if response['status_code'] == 202:
-        phone = get_phone_format(phonebook[callback.data][0])
-        await callback.message.answer(f'Переадресация на номер {phone} выполнена успешна!')
     else:
-        await callback.message.answer('Ошибка на сервере! \nПереадресация не выполнена!')
+        response = api.create_call_forwarding(phonebook[callback.data][0])
+        if response['status_code'] == 202:
+            phone = get_phone_format(phonebook[callback.data][0])
+            await callback.message.answer(f'Переадресация на номер {phone} выполнена успешна!')
+        else:
+            await callback.message.answer('Ошибка на сервере! \nПереадресация не выполнена!')
 
 
 @handlers_router.callback_query(F.data.in_(['all', 'self']))
 async def process_callback_show_timetable(callback: types.CallbackQuery):
     if callback.message.from_user.id not in white_users_id.values():
-        await message.reply('У вас нет прав доступа к этому боту!')
+        await callback.message.answer(text=f'У вас нет прав доступа к этому боту!')
     
-    out_data = ''
-    user_id = callback.from_user.id
-    username = [key for key, value in white_users_id.items() if value == user_id][0]
-
-    path = os.getenv('FILE_PATH')
-
-    if not path:
-        await callback.message.answer('Файл с дежурствами не найден!')
-
-    ex_data = get_excel_data(path)
-    person_data = parse_excel_data(ex_data)
-
-    if callback.data == 'self':
-        if username not in phonebook.keys():
-            await callback.message.answer('Вас нет в списке пользователей графика дежурств!')
-        else:
-            out_data = get_duty(person_data, username)
-            await callback.message.answer(out_data, parse_mode='HTML')
-    elif callback.data == 'all':
-        for username in phonebook.keys():
-            out_data += f'{get_duty(person_data, username)}\n\n'
-        await callback.message.answer(out_data, parse_mode='HTML')
-
-
-@handlers_router.message()
-async def access_users(message: types.Message):
-    if message.from_user.id not in white_users_id.values():
-        await message.reply('У вас нет прав доступа к этому боту!')
     else:
-        await message.reply('Добро пожаловать в телеграм бот!', reply_markup=reply.inline_kb1)
+        out_data = ''
+        user_id = callback.from_user.id
+        username = [key for key, value in white_users_id.items() if value == user_id][0]
+
+        path = os.getenv('FILE_PATH')
+
+        if not path:
+            await callback.message.answer('Файл с дежурствами не найден!')
+
+        ex_data = get_excel_data(path)
+        person_data = parse_excel_data(ex_data)
+
+        if callback.data == 'self':
+            if username not in phonebook.keys():
+                await callback.message.answer('Вас нет в списке пользователей графика дежурств!')
+            else:
+                out_data = get_duty(person_data, username)
+                await callback.message.answer(out_data, parse_mode='HTML')
+        elif callback.data == 'all':
+            for username in phonebook.keys():
+                out_data += f'{get_duty(person_data, username)}\n\n'
+            await callback.message.answer(out_data, parse_mode='HTML')
