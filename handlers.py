@@ -16,16 +16,23 @@ handlers_router = Router()
 
 @handlers_router.message(Command('start'))
 async def process_command_start(message: types.Message):
+    if message.from_user.id not in white_users_id.values():
+        await message.reply('У вас нет прав доступа к этому боту!')
     await message.reply('Добро пожаловать в телеграм бот!', reply_markup=reply.inline_kb1)
 
 
 @handlers_router.message(F.text)
 async def wrong_messages(message: types.Message):
+    if message.from_user.id not in white_users_id.values():
+        await message.reply('У вас нет прав доступа к этому боту!')
     await message.answer('Хватит писать тут всякую хрень!')
 
 
 @handlers_router.callback_query(F.data == 'check_status')
 async def process_callback_button1(callback_query: types.CallbackQuery):
+    if callback_query.message.from_user.id not in white_users_id.values():
+        await message.reply('У вас нет прав доступа к этому боту!')
+        
     response = api.get_status_call_forwarding()
     if response:
         phone = response[0]['productCharacteristic'][0]['value']
@@ -37,16 +44,23 @@ async def process_callback_button1(callback_query: types.CallbackQuery):
 
 @handlers_router.callback_query(F.data == 'create_call_forwarding')
 async def process_callback_button2(callback: types.CallbackQuery):
+    if callback.message.from_user.id not in white_users_id.values():
+        await message.reply('У вас нет прав доступа к этому боту!')
     await callback.message.answer('Сделай выбор, чувак!', reply_markup=reply.person_kb1)
 
 
 @handlers_router.callback_query(F.data == 'show_timetable')
 async def process_callback_button3(callback: types.CallbackQuery):
+    if callback.message.from_user.id not in white_users_id.values():
+        await message.reply('У вас нет прав доступа к этому боту!')
     await callback.message.answer('Выберите тип расписания:', reply_markup=reply.timetable_kb1)
 
 
 @handlers_router.callback_query(F.data.in_(phonebook.keys()))
 async def process_callback_redirection(callback: types.CallbackQuery):
+    if callback.message.from_user.id not in white_users_id.values():
+        await message.reply('У вас нет прав доступа к этому боту!')
+    
     response = api.create_call_forwarding(phonebook[callback.data][0])
     if response['status_code'] == 202:
         phone = get_phone_format(phonebook[callback.data][0])
@@ -57,6 +71,9 @@ async def process_callback_redirection(callback: types.CallbackQuery):
 
 @handlers_router.callback_query(F.data.in_(['all', 'self']))
 async def process_callback_show_timetable(callback: types.CallbackQuery):
+    if callback.message.from_user.id not in white_users_id.values():
+        await message.reply('У вас нет прав доступа к этому боту!')
+    
     out_data = ''
     user_id = callback.from_user.id
     username = [key for key, value in white_users_id.items() if value == user_id][0]
