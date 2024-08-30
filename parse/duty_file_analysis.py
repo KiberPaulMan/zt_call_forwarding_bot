@@ -27,7 +27,7 @@ def parse_excel_data(excel_data):
         list(phonebook.keys())[0]: [],
         list(phonebook.keys())[1]: [],
         list(phonebook.keys())[2]: [],
-        list(phonebook.keys())[3]: [],
+        # list(phonebook.keys())[3]: [],
     }
 
     for out_index, out_data in enumerate(excel_data.iterrows()):
