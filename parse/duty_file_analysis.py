@@ -51,12 +51,12 @@ def parse_excel_data(excel_data):
         #         data = data if isinstance(data, int) else 0
         #         parse_data[list(phonebook.keys())[3]].append(data)
 
-        if out_index == 7:  # Кохан Антон
+        if out_index == 8:  # Кохан Антон
             for data in out_data[1][2:33]:
                 data = data if isinstance(data, int) else 0
                 parse_data[list(phonebook.keys())[2]].append(data)
 
-        if out_index == 8:  # Эрднев Влад
+        if out_index == 9:  # Эрднев Влад
             for data in out_data[1][2:33]:
                 data = data if isinstance(data, int) else 0
                 parse_data[list(phonebook.keys())[1]].append(data)
