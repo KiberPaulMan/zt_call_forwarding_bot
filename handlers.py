@@ -102,5 +102,6 @@ async def process_callback_show_timetable(callback: types.CallbackQuery):
                 await callback.message.answer(out_data, parse_mode='HTML')
         elif callback.data == 'all':
             for username in phonebook.keys():
-                out_data += f'{get_duty(person_data, username)}\n\n'
+                if username != 'putincev':
+                    out_data += f'{get_duty(person_data, username)}\n\n'
             await callback.message.answer(out_data, parse_mode='HTML')
