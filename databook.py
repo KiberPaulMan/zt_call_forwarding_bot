@@ -7,7 +7,7 @@ phonebook = {
     'rusakov': (os.getenv('RUSAKOV'), 'Русаков Виктор'),
     'erdnev': (os.getenv('ERDNEV'), 'Эрднев Владислав'),
     'kohan': (os.getenv('KOHAN'), 'Кохан Антон'),
-    # 'shaykamalov': (os.getenv('SHAYKAMALOV'), 'Шайкамалов Александр'),
+    'putincev': (os.getenv('PUTINCEV'), 'Путинцев Павел'),
 }
 
 white_users_id = {
